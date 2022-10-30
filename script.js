@@ -1,68 +1,99 @@
 let result = document.getElementById('result');
 let inputNum = document.getElementById('inputNum');
 let inputMaster = document.getElementById('inputMaster');
-// let btnAdd = document.getElementById('btnAdd');
-// let btnSubtract = document.getElementById('btnSubtract');
+let btnClear = document.getElementById('btnClear');
 let btnNum = document.querySelectorAll('.btnNum');
 let btnOp = document.querySelectorAll('.btnOp');
 let btnResult = document.getElementById('btnResult');
-
 let masterInput = '';
 let masterInputNum = 0;
 let input = '';
 
 //Inputting new set of numbers
 for(num of btnNum){
-    num.onclick = function(e){
-        input = input + e.target.innerHTML;
-        inputNum.innerHTML = input;
-    }
-};  
-
-let currentOperation = '';
-let firstNum = true;
+    num.onclick = defNumInput};  
 
 //Inputting operation
 for(op of btnOp){
-    op.onclick = function(e){
-        
-        //Input is set to blank after clicking any of the operations button.
-        //If operation button was clicked last, we have a if here to avoid multiple clicks of operations
-        if(input === '') return
+    op.onclick = defGeneral
+};
 
-        //Complete copy of all inputs
-        masterInput = masterInput + input + e.target.innerHTML;
-        inputMaster.innerHTML = masterInput
+//Result Logic
+btnResult.onclick = function(){
+    if(masterInput ==='') return
+    inputMaster.innerHTML = masterInput + input + ' = ';
+    masterInputNum = defCalc(masterInputNum,Number(input));
+    inputNum.innerHTML = masterInputNum;
+};
 
-        //If this is the first number, then get only the input, else perform operation
+//Clear Logic
+btnClear.onclick = function(){
+    input = '';
+    masterInput = '';
+    masterInputNum = 0;
+    inputNum.innerHTML = input;
+    inputMaster.innerHTML = masterInput;
+}  
+
+
+//Functions
+
+//For the current input of user
+function defNumInput(e){
+    input = input + e.target.innerHTML;
+    inputNum.innerHTML = input;
+};
+
+
+//This function is for setting up the history of inputs and the result of those inputs
+let currentOperation = '';
+let firstNum = true;
+function defGeneral(e){       
+    //Input is set to blank after clicking any of the operations button (meaning it was repeated or changed) then
+    //avoid running of operation and avoid multiply displays of operation in the history inputs
+    let opRepeat = true;
+    if(input === ''){
+        masterInput = masterInput.slice(0,-3);
+        opRepeat = false;
+    } 
+
+    //Complete copy of all inputs
+    masterInput = masterInput + input + e.target.innerHTML;
+    inputMaster.innerHTML = masterInput;
+
+    //If this is the first number, then get only the input, else perform operation
+    if(opRepeat){
         if(!firstNum){
-            masterInputNum = defResult(masterInputNum,Number(input));
+            masterInputNum = defCalc(masterInputNum,Number(input));
             
         } else {
             masterInputNum = Number(input);
             firstNum = false;
-        }
+        };
+    };
+    
 
-        //Logic for operation used
-        if(e.target.innerHTML === '+'){
-            currentOperation = 'add';
-        } else if(e.target.innerHTML === '-') {
-            currentOperation = 'subtract';
-        } else if(e.target.innerHTML === 'x') {
-            currentOperation = 'multiply';
-        } else if(e.target.innerHTML === '÷') {
-            currentOperation = 'divide';
-        }
-        ;
-        console.log(e.target.innerHTML)
-        //Set input to none then change the inputNum to the result of the operation function
-        input = '';
-        inputNum.innerHTML = masterInputNum
+    //Logic for operation used
+    if(e.target.innerHTML === ' + '){
+        currentOperation = 'add';
+    } else if(e.target.innerHTML === ' - ') {
+        currentOperation = 'subtract';
+    } else if(e.target.innerHTML === ' x ') {
+        currentOperation = 'multiply';
+    } else if(e.target.innerHTML === ' ÷ ') {
+        currentOperation = 'divide';
     }
+    ;
+
+    //Set input to none then change the inputNum to the result of the operation function
+    input = '';
+    inputNum.innerHTML = masterInputNum
 };
 
+
+//Setting operation logic
 let totalNum = 0
-function defResult(num1,num2){
+function defCalc(num1,num2){
     if(currentOperation === 'add'){
         totalNum = num1 + num2; 
     } else if(currentOperation === 'subtract'){
@@ -74,10 +105,4 @@ function defResult(num1,num2){
     };
     return totalNum 
     
-}
-
-//Input numbers > put operation > 
-
-btnResult.onclick = function(){
-    
-}
+};
