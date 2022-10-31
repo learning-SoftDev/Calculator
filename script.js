@@ -2,7 +2,7 @@ let inputNum = document.getElementById('inputNum');
 let inputMaster = document.getElementById('inputMaster');
 let masterInput = '';
 let masterInputNum = 0;
-let input = '';
+let input = '0';
 
 //Select buttons
 let btnClear = document.getElementById('btnClear');
@@ -21,21 +21,42 @@ for(op of btnOp){
 };
 
 //Result Logic
+let resultClicked = false;
 btnResult.onclick = function(){
+    //If there's no history, then do not perform anything beyond this line
     if(masterInput ==='') return
-    inputMaster.innerHTML = masterInput + input + ' = ';
+
+    if(resultClicked) return
+
+    //If lastClicked is operation, then remove the operator then equals, else do not remove anything then equals
+    if(lastClicked === 'Operation'){
+        inputMaster.innerHTML = (masterInput + input).slice(0,-1) + ' = ';
+    } else {
+        inputMaster.innerHTML = masterInput + input + ' = ';
+    }
     masterInputNum = defCalc(masterInputNum,Number(input));
     inputNum.innerHTML = masterInputNum;
+    
+    masterInput = masterInputNum.toString()
+    resultClicked = true;
+    console.log(masterInput)
 };
 
 //Clear Logic
-btnClear.onclick = function(){
-    input = '';
+btnClear.onclick = defClear;
+
+
+function defClear(){
+    input = '0';
     masterInput = '';
     masterInputNum = 0;
     inputNum.innerHTML = input;
     inputMaster.innerHTML = masterInput;
+    resultClicked =false;
 };
+
+
+
 
 //Delete
 btnDelete.onclick = function(){
@@ -49,37 +70,56 @@ btnDelete.onclick = function(){
 
 //For the current input of user
 function defNumInput(e){
+    if(resultClicked){
+        defClear() 
+    };
+
+    if(input==='0'){
+        input = 
+    }
     input = input + e.target.innerHTML;
     inputNum.innerHTML = input;
+    lastClicked = 'Input';
+    
 };
 
 
 //This function is for setting up the history of inputs and the result of those inputs
 let currentOperation = '';
 let firstNum = true;
+let lastClicked = 'Input';
 function defGeneral(e){       
     //Input is set to blank after clicking any of the operations button (meaning it was repeated or changed) then
     //avoid running of operation and avoid multiply displays of operation in the history inputs
     let opRepeat = true;
-    if(input === ''){
-        masterInput = masterInput.slice(0,-3);
+    if(input === '' && !resultClicked){
+        masterInput = masterInput.slice(0,-1);
         opRepeat = false;
     } 
 
     //Complete copy of all inputs
-    masterInput = masterInput + input + e.target.innerHTML;
+    if(!resultClicked){
+        masterInput = masterInput + input + e.target.innerHTML;
+    } else {
+        console.log(masterInput);
+        masterInput = masterInput + e.target.innerHTML;
+    }
+    
     inputMaster.innerHTML = masterInput;
 
     //If this is the first number, then get only the input, else perform operation
-    if(opRepeat){
-        if(!firstNum){
-            masterInputNum = defCalc(masterInputNum,Number(input));
-            
-        } else {
-            masterInputNum = Number(input);
-            firstNum = false;
+    if(!resultClicked){
+        if(opRepeat){
+            if(!firstNum){
+                masterInputNum = defCalc(masterInputNum,Number(input));
+                
+            } else {
+                masterInputNum = Number(input);
+                firstNum = false;
+            };
         };
-    };
+    }
+    
     
 
     //Logic for operation used
@@ -96,7 +136,9 @@ function defGeneral(e){
 
     //Set input to none then change the inputNum to the result of the operation function
     input = '';
-    inputNum.innerHTML = masterInputNum
+    inputNum.innerHTML = masterInputNum;
+    lastClicked = 'Operation';
+    resultClicked = false;
 };
 
 
