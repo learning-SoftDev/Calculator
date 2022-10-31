@@ -12,6 +12,7 @@ let btnResult = document.getElementById('btnResult');
 let btnDelete = document.getElementById('btnDelete');
 let btnOnOff = document.getElementById('btnOnOff');
 
+
 //Inputting new set of numbers
 for(num of btnNum){
     num.onclick = defNumInput};  
@@ -21,9 +22,13 @@ for(op of btnOp){
     op.onclick = defGeneral
 };
 
+
 //Result Logic
 let resultClicked = false;
 btnResult.onclick = function(){
+    //If off, then do nothing
+    if(statusOnOff === 'off') return;
+
     //If there's no history, then do not perform anything beyond this line
     if(masterInput ==='') return
 
@@ -49,6 +54,9 @@ btnClear.onclick = defClear;
 
 //When AC button is clicked, then clear current contents
 function defClear(){
+    //If off, then do nothing
+    if(statusOnOff === 'off') return;
+    
     input = '0';
     masterInput = '';
     masterInputNum = 0;
@@ -59,6 +67,9 @@ function defClear(){
 
 //Delete
 btnDelete.onclick = function(){
+    //If off, then do nothing
+    if(statusOnOff === 'off') return;
+
     if(resultClicked) return
     if(input==='' || input==='0') return
     if(input.length === 1){
@@ -70,12 +81,17 @@ btnDelete.onclick = function(){
 }
 
 //OnOff Button
-let statusOnOff = false
+let statusOnOff = 'off'
 btnOnOff.onclick = function(){
-    if(statusOnOff){
+    if(statusOnOff === 'off'){
+        statusOnOff = 'on'
         defClear();
+    } else {
+        defClear();
+        statusOnOff = 'off';
+        inputNum.innerHTML = ''
     };
-    statusOnOff = !statusOnOff
+    
 }
 
 
@@ -83,6 +99,9 @@ btnOnOff.onclick = function(){
 
 //For the current input of user
 function defNumInput(e){
+    //If off, then do nothing
+    if(statusOnOff === 'off') return;
+
     if(resultClicked){
         defClear() 
     };
@@ -104,6 +123,8 @@ let currentOperation = '';
 let firstNum = true;
 let lastClicked = 'Input';
 function defGeneral(e){
+    //If off, then do nothing
+    if(statusOnOff === 'off') return;
 
     //If input is zero, then do nothing
     if(input==='0') return;       
