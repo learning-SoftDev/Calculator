@@ -10,6 +10,7 @@ let btnNum = document.querySelectorAll('.btnNum');
 let btnOp = document.querySelectorAll('.btnOp');
 let btnResult = document.getElementById('btnResult');
 let btnDelete = document.getElementById('btnDelete');
+let btnOnOff = document.getElementById('btnOnOff');
 
 //Inputting new set of numbers
 for(num of btnNum){
@@ -26,6 +27,7 @@ btnResult.onclick = function(){
     //If there's no history, then do not perform anything beyond this line
     if(masterInput ==='') return
 
+    //To avoid multiple click of equals
     if(resultClicked) return
 
     //If lastClicked is operation, then remove the operator then equals, else do not remove anything then equals
@@ -39,13 +41,13 @@ btnResult.onclick = function(){
     
     masterInput = masterInputNum.toString()
     resultClicked = true;
-    console.log(masterInput)
+    console.log(input)
 };
 
 //Clear Logic
 btnClear.onclick = defClear;
 
-
+//When AC button is clicked, then clear current contents
 function defClear(){
     input = '0';
     masterInput = '';
@@ -55,14 +57,25 @@ function defClear(){
     resultClicked =false;
 };
 
-
-
-
 //Delete
 btnDelete.onclick = function(){
-    input = input.slice(0,-1);
+    if(resultClicked) return
+    if(input==='' || input==='0') return
+    if(input.length === 1){
+        input = '0';
+    } else {
+        input = input.slice(0,-1);
+    };
     inputNum.innerHTML = input;
-    console.log('hakdog')
+}
+
+//OnOff Button
+let statusOnOff = false
+btnOnOff.onclick = function(){
+    if(statusOnOff){
+        defClear();
+    };
+    statusOnOff = !statusOnOff
 }
 
 
@@ -74,9 +87,11 @@ function defNumInput(e){
         defClear() 
     };
 
+    //If input is zero, then remove since there's no sense in putting zero at the front of numbers
     if(input==='0'){
-        input = 
-    }
+        input = ''
+    };
+
     input = input + e.target.innerHTML;
     inputNum.innerHTML = input;
     lastClicked = 'Input';
@@ -88,7 +103,11 @@ function defNumInput(e){
 let currentOperation = '';
 let firstNum = true;
 let lastClicked = 'Input';
-function defGeneral(e){       
+function defGeneral(e){
+
+    //If input is zero, then do nothing
+    if(input==='0') return;       
+
     //Input is set to blank after clicking any of the operations button (meaning it was repeated or changed) then
     //avoid running of operation and avoid multiply displays of operation in the history inputs
     let opRepeat = true;
@@ -135,7 +154,9 @@ function defGeneral(e){
     ;
 
     //Set input to none then change the inputNum to the result of the operation function
+   
     input = '';
+    
     inputNum.innerHTML = masterInputNum;
     lastClicked = 'Operation';
     resultClicked = false;
