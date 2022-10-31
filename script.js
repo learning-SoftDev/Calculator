@@ -1,13 +1,15 @@
-let result = document.getElementById('result');
 let inputNum = document.getElementById('inputNum');
 let inputMaster = document.getElementById('inputMaster');
+let masterInput = '';
+let masterInputNum = 0;
+let input = '';
+
+//Select buttons
 let btnClear = document.getElementById('btnClear');
 let btnNum = document.querySelectorAll('.btnNum');
 let btnOp = document.querySelectorAll('.btnOp');
 let btnResult = document.getElementById('btnResult');
-let masterInput = '';
-let masterInputNum = 0;
-let input = '';
+let btnDelete = document.getElementById('btnDelete');
 
 //Inputting new set of numbers
 for(num of btnNum){
@@ -33,7 +35,14 @@ btnClear.onclick = function(){
     masterInputNum = 0;
     inputNum.innerHTML = input;
     inputMaster.innerHTML = masterInput;
-}  
+};
+
+//Delete
+btnDelete.onclick = function(){
+    input = input.slice(0,-1);
+    inputNum.innerHTML = input;
+    console.log('hakdog')
+}
 
 
 //Functions
@@ -74,13 +83,13 @@ function defGeneral(e){
     
 
     //Logic for operation used
-    if(e.target.innerHTML === ' + '){
+    if(e.target.innerHTML === '+'){
         currentOperation = 'add';
-    } else if(e.target.innerHTML === ' - ') {
+    } else if(e.target.innerHTML === '-') {
         currentOperation = 'subtract';
-    } else if(e.target.innerHTML === ' x ') {
+    } else if(e.target.innerHTML === '×') {
         currentOperation = 'multiply';
-    } else if(e.target.innerHTML === ' ÷ ') {
+    } else if(e.target.innerHTML === '÷') {
         currentOperation = 'divide';
     }
     ;
