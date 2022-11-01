@@ -46,7 +46,6 @@ btnResult.onclick = function(){
     
     masterInput = masterInputNum.toString()
     resultClicked = true;
-    console.log(input)
 };
 
 //Clear Logic
@@ -63,6 +62,7 @@ function defClear(){
     inputNum.innerHTML = input;
     inputMaster.innerHTML = masterInput;
     resultClicked =false;
+    dotClicked = false;
 };
 
 //Delete
@@ -81,7 +81,7 @@ btnDelete.onclick = function(){
 }
 
 //OnOff Button
-let statusOnOff = 'off'
+let statusOnOff = 'on'
 btnOnOff.onclick = function(){
     if(statusOnOff === 'off'){
         statusOnOff = 'on'
@@ -98,9 +98,19 @@ btnOnOff.onclick = function(){
 //Functions
 
 //For the current input of user
+let dotClicked = false
 function defNumInput(e){
-    //If off, then do nothing
+    //If off, then do nothing. If dot is already clicked, do nothing.
     if(statusOnOff === 'off') return;
+    
+
+    // if(e.target.innerHTML === '.'){
+    //     if(dotClicked) {
+    //         return
+    //     } else {
+    //         dotClicked = true;
+    //     };    
+    // };
 
     if(resultClicked){
         defClear() 
@@ -123,6 +133,7 @@ let currentOperation = '';
 let firstNum = true;
 let lastClicked = 'Input';
 function defGeneral(e){
+
     //If off, then do nothing
     if(statusOnOff === 'off') return;
 
@@ -141,9 +152,8 @@ function defGeneral(e){
     if(!resultClicked){
         masterInput = masterInput + input + e.target.innerHTML;
     } else {
-        console.log(masterInput);
         masterInput = masterInput + e.target.innerHTML;
-    }
+    }   
     
     inputMaster.innerHTML = masterInput;
 
@@ -152,7 +162,6 @@ function defGeneral(e){
         if(opRepeat){
             if(!firstNum){
                 masterInputNum = defCalc(masterInputNum,Number(input));
-                
             } else {
                 masterInputNum = Number(input);
                 firstNum = false;
@@ -181,21 +190,21 @@ function defGeneral(e){
     inputNum.innerHTML = masterInputNum;
     lastClicked = 'Operation';
     resultClicked = false;
+    dotClicked = false
 };
 
 
 //Setting operation logic
-let totalNum = 0
+let totalNum = 0;
 function defCalc(num1,num2){
     if(currentOperation === 'add'){
-        totalNum = num1 + num2; 
+        totalNum = num1 + num2
     } else if(currentOperation === 'subtract'){
-        totalNum = num1 - num2;
+        totalNum = num1 - num2
     } else if(currentOperation === 'multiply'){
-        totalNum = num1 * num2;
-    } else if(currentOperation === 'divide'){
-        totalNum = num1 / num2;
+        totalNum = num1 * num2
+    } else if(currentOperation === 'divide'){   
+        totalNum = num1 / num2
     };
-    return totalNum 
-    
+    return Math.round(totalNum * 1000) / 1000; 
 };
